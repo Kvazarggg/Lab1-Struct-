@@ -1,0 +1,266 @@
+#include <iostream>
+using namespace std;
+
+struct Date
+{
+	short day;
+	short month;
+	short year;
+	bool isCorrect();
+	int daysBetween(Date date2);
+	int Age(Date date2);
+};
+
+int Date::daysBetween(Date date2)
+{
+	const float DAYS_IN_YEAR = 365.25;
+	float days1 = DAYS_IN_YEAR * year + DAYS_IN_YEAR / 12 * (month - 1.) + day;
+	float days2 = DAYS_IN_YEAR * date2.year + DAYS_IN_YEAR / 12 * (date2.month - 1.) + date2.day;
+
+	return (days2 > days1 ? days2 - days1 : days1 - days2);
+}
+int Date::Age(Date date2)
+{
+	int age;
+	if (day >= date2.day && month >= date2.month)
+	{
+		age = year - date2.year;
+	}
+	else
+	{
+		age = year - date2.year;
+		age--;
+	}
+	return age;
+}
+
+bool Date::isCorrect()
+{
+	bool result = false;
+
+	if (month > 0 && month <= 12 && year <= 2021)
+	{
+		switch (month)
+		{
+		case 1:
+		case 3:
+		case 5:
+		case 7:
+		case 8:
+		case 10:
+		case 12:
+		{
+			if ((day <= 31) && (day > 0))
+				result = true;
+			break;
+		}
+		case 4:
+		case 6:
+		case 9:
+		case 11:
+		{
+			if ((day <= 30) && (day > 0))
+				result = true;
+			break;
+		}
+
+		case 2:
+		{
+			if (year % 4 != 0)
+			{
+				if ((day <= 28) && (day > 0))
+					result = true;
+			}
+			else
+				if (year % 400 == 0)
+				{
+					if ((day <= 29) && (day > 0))
+						result = true;
+				}
+				else
+					if ((year % 100 == 0) && (year % 400 != 0))
+					{
+						if ((day == 28) && (day > 0))
+							result = true;
+					}
+					else
+						if ((year % 4 == 0) && (year % 100 != 0))
+							if ((day <= 29) && (day > 0))
+								result = true;
+			break;
+		}
+
+		default:
+			result = false;
+		}
+	}
+	return result;
+}
+
+struct Shop
+{
+	char Seller[255];
+	char Product_Name[30];
+	short Number;
+	int Price;
+	Date sale;
+
+	void printInfo();
+	void readInfo();
+};
+
+void Shop::printInfo()
+{
+	cout << endl << "Product Info:" << endl;
+	cout << "Seller Name: " << Seller << endl;
+	cout << "Product Name: " << Product_Name << endl;
+	cout << "Price: " << Price << endl;
+	cout << "Date of Sale: " << sale.day << "." << sale.month << "." << sale.year;
+	cout << "\n\n";
+}
+
+void Shop::readInfo()
+{
+	cout << "\nInput Seller name: ";
+	cin.ignore(std::cin.rdbuf()->in_avail());
+	cin.getline(Seller, sizeof(Seller));
+
+	cout << "\nInput Product name: ";
+	cin.ignore(std::cin.rdbuf()->in_avail());
+	cin.getline(Product_Name, sizeof(Product_Name));
+
+	cout << "\nInput Number: ";
+	cin.ignore(std::cin.rdbuf()->in_avail());
+	cin >> Number;
+
+	cout << "\nInput Price: ";
+	cin.ignore(std::cin.rdbuf()->in_avail());
+	cin >> Price;
+
+	do
+	{
+		cout << "\nInput Sale date: ";
+		cin.ignore(std::cin.rdbuf()->in_avail());
+		cin >> sale.day >> sale.month >> sale.year;
+	} while (!sale.isCorrect());
+}
+
+void Basic_level()
+{
+	const int N = 3;
+	Shop product[N];
+
+	for (int i = 0; i < N; i++)
+	{
+		product[i].readInfo();
+	}
+	Date date1, date2;
+	date1.day = 5; date1.month = 3; date1.year = 2021;
+	int Product_num = 0;
+	for (int i = 0; i < N; i++)
+	{
+		date2.day = product[i].sale.day; date2.month = product[i].sale.month; date2.year = product[i].sale.year;
+		int days = date1.daysBetween(date2);
+		if (days < 365)
+		{
+			Product_num++;
+		}
+	}
+
+	cout << "\nNumber of products sold less than a year ago - " << Product_num << endl;
+
+	for (int i = 0; i < N; i++)
+	{
+		date2.day = product[i].sale.day; date2.month = product[i].sale.month; date2.year = product[i].sale.year;
+		int days = date1.daysBetween(date2);
+		if (days < 365)
+		{
+			product[i].printInfo();
+		}
+	}
+}
+
+
+struct Work
+{
+	char F[56];
+	char I[32];
+	char O[32];
+	char Position[224];
+	float Salary;
+	Date birthday;
+};
+
+void Average_level()
+{
+	const int N = 3;
+	Work work_info[N];
+
+	for (int i = 0; i < N; i++)
+	{
+		cout << "\nInput F: ";
+		cin.ignore(std::cin.rdbuf()->in_avail());
+		cin.getline(work_info[i].F, sizeof(work_info[i].F));
+
+		cout << "\nInput I: ";
+		cin.ignore(std::cin.rdbuf()->in_avail());
+		cin.getline(work_info[i].I, sizeof(work_info[i].I));
+
+		cout << "\nInput O: ";
+		cin.ignore(std::cin.rdbuf()->in_avail());
+		cin.getline(work_info[i].O, sizeof(work_info[i].O));
+
+		cout << "\nInput Position: ";
+		cin.ignore(std::cin.rdbuf()->in_avail());
+		cin.getline(work_info[i].Position, sizeof(work_info[i].Position));
+
+		cout << "\nInput Salary: ";
+		cin.ignore(std::cin.rdbuf()->in_avail());
+		cin >> work_info[i].Salary;
+
+		do
+		{
+			cout << "\nInput birthday: ";
+			cin.ignore(std::cin.rdbuf()->in_avail());
+			cin >> work_info[i].birthday.day >> work_info[i].birthday.month >> work_info[i].birthday.year;
+		} while (!work_info[i].birthday.isCorrect());
+	}
+
+	float averageSalary = 0;
+
+	for (int i = 0; i < N; i++)
+	{
+		averageSalary += work_info[i].Salary;
+	}
+
+	averageSalary /= N;
+
+	Date date1, date2;
+	date1.day = 5; date1.month = 3; date1.year = 2021;
+	int human_age;
+	cout << "\nEmployees with above average salaries and less than 30 years of age:\n" << endl;
+	for (int i = 0; i < N; i++)
+	{
+		date2.day = work_info[i].birthday.day; date2.month = work_info[i].birthday.month; date2.year = work_info[i].birthday.year;
+		human_age = date1.Age(date2);
+
+		if (work_info[i].Salary > averageSalary && human_age < 30)
+		{
+			cout << endl << "Information about the employee:" << endl;
+			cout << "\nFIO: " << work_info[i].F << " " << work_info[i].I << " " << work_info[i].O << endl;
+			cout << "Position: " << work_info[i].Position << endl;
+			cout << "Salary: " << work_info[i].Salary << endl;
+			cout << "Date of Birth: " << work_info[i].birthday.day << "." << work_info[i].birthday.month << "." << work_info[i].birthday.year;
+			cout << "\n\n";
+		}
+	}
+}
+
+
+int main()
+{
+	cout << "Basic Level" << endl;
+	Basic_level();
+	cout << "Average Level" << endl;
+	Average_level();
+}
